@@ -47,9 +47,16 @@
       android:theme="@style/Theme.PodPlay"
     android:usesCleartextTraffic="true"
     >
+    <service android:name=".service.PodplayMediaService" android:exported="false">
+      <intent-filter>
+        <action android:name="android.media.browse.MediaBrowserService" />
+      </intent-filter>
+    </service>
+
     <activity android:name=".ui.PodcastActivity"
         android:launchMode="singleTop"
-        android:theme="@style/Theme.PodPlay.NoActionBar">
+        android:theme="@style/Theme.PodPlay.NoActionBar"
+        android:exported="true">
       <intent-filter>
         <action android:name="android.intent.action.MAIN"/>
         <action android:name="android.intent.action.SEARCH"/>
