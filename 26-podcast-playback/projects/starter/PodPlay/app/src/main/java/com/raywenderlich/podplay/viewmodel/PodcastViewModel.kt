@@ -52,7 +52,7 @@ class PodcastViewModel(application: Application) : AndroidViewModel(application)
       .getInstance(application, viewModelScope)
       .podcastDao()
 
-  private var activePodcast: Podcast? = null
+   var activePodcast: Podcast? = null
 
   suspend fun setActivePodcast(feedUrl: String): PodcastSummaryViewData? {
     val repo = podcastRepo ?: return null

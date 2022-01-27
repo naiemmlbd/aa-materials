@@ -12,6 +12,12 @@ import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
 
+interface PodplayMediaListener {
+    fun onStateChanged()
+    fun onStopPlaying()
+    fun onPausePlaying()
+}
+
 class PodplayMediaCallback(
     val context: Context,
     val mediaSession: MediaSessionCompat,
@@ -22,6 +28,7 @@ class PodplayMediaCallback(
     private var newMedia: Boolean = false
     private var mediaExtras: Bundle? = null
     private var focusRequest: AudioFocusRequest? = null
+    var listener: PodplayMediaListener? = null
 
 
     private fun setNewMedia(uri: Uri?) {
@@ -161,6 +168,7 @@ class PodplayMediaCallback(
                 setState(PlaybackStateCompat.STATE_PAUSED)
             }
         }
+        listener?.onPausePlaying()
     }
 
     private fun stopPlaying() {
@@ -172,6 +180,7 @@ class PodplayMediaCallback(
                 setState(PlaybackStateCompat.STATE_STOPPED)
             }
         }
+        listener?.onStopPlaying()
     }
 
     private fun setState(state: Int) {
@@ -189,5 +198,11 @@ class PodplayMediaCallback(
             .setState(state, position, 1.0f)
             .build()
         mediaSession.setPlaybackState(playbackState)
+        if (state == PlaybackStateCompat.STATE_PAUSED ||
+            state == PlaybackStateCompat.STATE_PLAYING
+        ) {
+            listener?.onStateChanged()
+        }
+
     }
 }
