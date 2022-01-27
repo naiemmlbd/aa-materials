@@ -195,6 +195,11 @@ class PodplayMediaService : MediaBrowserServiceCompat(), PodplayMediaListener {
             PODPLAY_EMPTY_ROOT_MEDIA_ID, null
         )
     }
+    override fun onTaskRemoved(rootIntent: Intent?) {
+        super.onTaskRemoved(rootIntent)
+        mediaSession.controller.transportControls.stop()
+    }
+
 
     companion object {
         private const val PODPLAY_EMPTY_ROOT_MEDIA_ID =
