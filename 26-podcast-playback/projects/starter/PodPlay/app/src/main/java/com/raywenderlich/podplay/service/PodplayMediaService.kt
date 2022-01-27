@@ -156,10 +156,22 @@ class PodplayMediaService : MediaBrowserServiceCompat(), PodplayMediaListener {
             PodcastActivity::class.java
         )
         openActivityIntent.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
-        return PendingIntent.getActivity(
-            this@PodplayMediaService, 0, openActivityIntent,
-            FLAG_CANCEL_CURRENT
-        )
+
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            PendingIntent.getActivity(
+                this@PodplayMediaService,
+                0,
+                openActivityIntent,
+                PendingIntent.FLAG_MUTABLE
+            )
+        } else {
+            PendingIntent.getActivity(
+                this@PodplayMediaService,
+                0,
+                openActivityIntent,
+                FLAG_CANCEL_CURRENT
+            )
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -195,6 +207,7 @@ class PodplayMediaService : MediaBrowserServiceCompat(), PodplayMediaListener {
             PODPLAY_EMPTY_ROOT_MEDIA_ID, null
         )
     }
+
     override fun onTaskRemoved(rootIntent: Intent?) {
         super.onTaskRemoved(rootIntent)
         mediaSession.controller.transportControls.stop()
