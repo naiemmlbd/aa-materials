@@ -120,8 +120,17 @@ class PodcastDetailsFragment : Fragment(), EpisodeListAdapterListener {
   private fun startPlaying(episodeViewData: PodcastViewModel.EpisodeViewData) {
     val fragmentActivity = activity as FragmentActivity
     val controller = MediaControllerCompat.getMediaController(fragmentActivity)
+    val viewData = podcastViewModel.activePodcast ?: return
+    val bundle = Bundle()
+    bundle.putString(MediaMetadataCompat.METADATA_KEY_TITLE,
+      episodeViewData.title)
+    bundle.putString(MediaMetadataCompat.METADATA_KEY_ARTIST,
+      viewData.feedTitle)
+    bundle.putString(MediaMetadataCompat.METADATA_KEY_ALBUM_ART_URI,
+      viewData.imageUrl)
+
     controller.transportControls.playFromUri(
-      Uri.parse(episodeViewData.mediaUrl), null)
+      Uri.parse(episodeViewData.mediaUrl), bundle)
   }
 
   override fun onStart() {
