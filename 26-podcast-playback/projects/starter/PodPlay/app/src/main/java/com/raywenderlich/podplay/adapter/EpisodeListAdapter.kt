@@ -35,7 +35,6 @@ class EpisodeListAdapter(
                 }
             }
         }
-
     }
 
     override fun onCreateViewHolder(
