@@ -90,6 +90,13 @@ class EpisodePlayerFragment : Fragment() {
     databinding.speedButton.text = speedButtonText
   }
 
+  private fun seekBy(seconds: Int) {
+    val fragmentActivity = activity as FragmentActivity
+    val controller = MediaControllerCompat.getMediaController(fragmentActivity)
+    val newPosition = controller.playbackState.position + seconds*1000
+    controller.transportControls.seekTo(newPosition)
+  }
+
   private fun setupControls() {
     databinding.playToggleButton.setOnClickListener {
       togglePlayPause()
@@ -100,6 +107,12 @@ class EpisodePlayerFragment : Fragment() {
       }
     } else {
       databinding.speedButton.visibility = View.INVISIBLE
+    }
+    databinding.forwardButton.setOnClickListener {
+      seekBy(30)
+    }
+    databinding.replayButton.setOnClickListener {
+      seekBy(-10)
     }
   }
 
@@ -203,7 +216,6 @@ class EpisodePlayerFragment : Fragment() {
       println("state changed to $state")
       val state = state ?: return
       handleStateChange(state.state)
-
     }
   }
 

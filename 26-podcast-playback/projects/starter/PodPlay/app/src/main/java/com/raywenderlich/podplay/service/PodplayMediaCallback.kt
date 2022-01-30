@@ -132,6 +132,21 @@ class PodplayMediaCallback(
         }
     }
 
+    override fun onSeekTo(pos: Long) {
+        super.onSeekTo(pos)
+        // 1
+        mediaPlayer?.seekTo(pos.toInt())
+        // 2
+        val playbackState: PlaybackStateCompat? =
+            mediaSession.controller.playbackState
+        // 3
+        if (playbackState != null) {
+            setState(playbackState.state)
+        } else {
+            setState(PlaybackStateCompat.STATE_PAUSED)
+        }
+    }
+
     private fun initializeMediaPlayer() {
         if (mediaPlayer == null) {
             mediaPlayer = MediaPlayer()
@@ -275,7 +290,6 @@ class PodplayMediaCallback(
         ) {
             listener?.onStateChanged()
         }
-
     }
 
     companion object {
