@@ -185,7 +185,8 @@ class PodplayMediaCallback(
                                     mediaExtras.getString(
                                         MediaMetadataCompat.METADATA_KEY_ALBUM_ART_URI
                                     )
-                                )
+                                ).putLong(MediaMetadataCompat.METADATA_KEY_DURATION,
+                                    mediaPlayer.duration.toLong())
                                 .build()
                         )
                     }
@@ -197,6 +198,7 @@ class PodplayMediaCallback(
     //to start the playback of the audio media.
     private fun startPlaying() {
         mediaPlayer?.let { mediaPlayer ->
+
             if (!mediaPlayer.isPlaying) {
                 mediaPlayer.start()
                 setState(PlaybackStateCompat.STATE_PLAYING)
