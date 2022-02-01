@@ -200,11 +200,11 @@ class PodcastActivity : AppCompatActivity(), PodcastListAdapterListener,
   }
 
   private fun setupPodcastListView() {
-    podcastViewModel.getPodcasts()?.observe(this, {
+    podcastViewModel.getPodcasts()?.observe(this) {
       if (it != null) {
         showSubscribedPodcasts()
       }
-    })
+    }
   }
 
   private fun addBackStackListener() {
@@ -248,6 +248,24 @@ class PodcastActivity : AppCompatActivity(), PodcastListAdapterListener,
 
     return podcastDetailsFragment
   }
+  private fun createEpisodePlayerFragment(): EpisodePlayerFragment {
+    var episodePlayerFragment =
+      supportFragmentManager.findFragmentByTag(TAG_PLAYER_FRAGMENT) as
+              EpisodePlayerFragment?
+
+    if (episodePlayerFragment == null) {
+      episodePlayerFragment = EpisodePlayerFragment.newInstance()
+    }
+
+    return episodePlayerFragment
+  }
+  private fun showPlayerFragment() {
+    val episodePlayerFragment = createEpisodePlayerFragment()
+    supportFragmentManager.beginTransaction().replace(R.id.podcastDetailsContainer,
+      episodePlayerFragment, TAG_PLAYER_FRAGMENT).addToBackStack("PlayerFragment").commit()
+    databinding.podcastRecyclerView.visibility = View.INVISIBLE
+    searchMenuItem.isVisible = false
+  }
 
   private fun showProgressBar() {
     databinding.progressBar.visibility = View.VISIBLE
@@ -260,6 +278,7 @@ class PodcastActivity : AppCompatActivity(), PodcastListAdapterListener,
   companion object {
     private const val TAG_DETAILS_FRAGMENT = "DetailsFragment"
     private const val TAG_EPISODE_UPDATE_JOB = "com.raywenderlich.podplay.episodes"
+    private const val TAG_PLAYER_FRAGMENT = "PlayerFragment"
   }
 
   override fun onSubscribe() {
@@ -271,4 +290,19 @@ class PodcastActivity : AppCompatActivity(), PodcastListAdapterListener,
     podcastViewModel.deleteActivePodcast()
     supportFragmentManager.popBackStack()
   }
+
+  override fun onShowEpisodePlayer(
+    episodeViewDataPosition: Int,
+    episodeList: List<PodcastViewModel.EpisodeViewData>
+  ) {
+    podcastViewModel.activeEpisodeViewData = episodeList[episodeViewDataPosition]
+    podcastViewModel.intialEpisodePosition = episodeViewDataPosition
+    podcastViewModel.episodeList = episodeList
+    showPlayerFragment()   }
+
+
+//  override fun onShowEpisodePlayer(episodeViewData: PodcastViewModel.EpisodeViewData) {
+//    podcastViewModel.activeEpisodeViewData = episodeViewData
+//    showPlayerFragment()
+//  }
 }
