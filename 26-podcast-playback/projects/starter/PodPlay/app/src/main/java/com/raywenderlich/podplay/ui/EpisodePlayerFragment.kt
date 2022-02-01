@@ -39,6 +39,7 @@ class EpisodePlayerFragment : Fragment() {
     private var episodeDuration: Long = 0
     private var draggingScrubber: Boolean = false
     private var progressAnimator: ValueAnimator? = null
+    private var nextPrevVal = 0
 
     companion object {
         fun newInstance(): EpisodePlayerFragment {
@@ -49,10 +50,6 @@ class EpisodePlayerFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initMediaBrowser()
-    }
-
-    override fun onResume() {
-        super.onResume()
     }
 
     override fun onCreateView(
@@ -68,6 +65,19 @@ class EpisodePlayerFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setupControls()
         updateControls()
+        nextPrevVal = podcastViewModel.intialEpisodePosition
+
+    }
+    private fun onNextClick(){
+        nextPrevVal++
+        podcastViewModel.activeEpisodeViewData = podcastViewModel.episodeList[nextPrevVal]
+        updateControls()
+        checkAndRegisterMediaController()
+        podcastViewModel.activeEpisodeViewData?.let { startPlaying(it) }
+        val fragmentActivity = activity as FragmentActivity
+        val controller = MediaControllerCompat.getMediaController(fragmentActivity)
+        controller.transportControls.skipToNext()
+
     }
 
     private fun togglePlayPause() {
@@ -153,6 +163,9 @@ class EpisodePlayerFragment : Fragment() {
             }
         } else {
             databinding.speedButton.visibility = View.INVISIBLE
+        }
+        databinding.nextButton.setOnClickListener {
+            onNextClick()
         }
         databinding.forwardButton.setOnClickListener {
             seekBy(30)

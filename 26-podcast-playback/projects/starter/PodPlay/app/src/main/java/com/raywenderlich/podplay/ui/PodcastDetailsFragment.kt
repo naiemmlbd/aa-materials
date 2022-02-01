@@ -45,6 +45,7 @@ import com.raywenderlich.podplay.adapter.EpisodeListAdapterListener
 import com.raywenderlich.podplay.databinding.FragmentPodcastDetailsBinding
 import com.raywenderlich.podplay.viewmodel.PodcastViewModel
 import com.raywenderlich.podplay.viewmodel.PodcastViewModel.EpisodeViewData
+import java.text.FieldPosition
 
 class PodcastDetailsFragment : Fragment(), EpisodeListAdapterListener {
 
@@ -52,6 +53,7 @@ class PodcastDetailsFragment : Fragment(), EpisodeListAdapterListener {
     private lateinit var databinding: FragmentPodcastDetailsBinding
     private lateinit var episodeListAdapter: EpisodeListAdapter
     private var listener: OnPodcastDetailsListener? = null
+    private var storeList: List<EpisodeViewData> = ArrayList()
 
     companion object {
         fun newInstance(): PodcastDetailsFragment {
@@ -96,6 +98,7 @@ class PodcastDetailsFragment : Fragment(), EpisodeListAdapterListener {
                 )
                 databinding.episodeRecyclerView.addItemDecoration(dividerItemDecoration)
                 // 3
+                storeList = viewData.episodes
                 episodeListAdapter = EpisodeListAdapter(viewData.episodes, this)
                 databinding.episodeRecyclerView.adapter = episodeListAdapter
 
@@ -158,10 +161,10 @@ class PodcastDetailsFragment : Fragment(), EpisodeListAdapterListener {
     interface OnPodcastDetailsListener {
         fun onSubscribe()
         fun onUnsubscribe()
-        fun onShowEpisodePlayer(episodeViewData: EpisodeViewData)
+        fun onShowEpisodePlayer(episodeViewDataPosition: Int, episodeList: List<EpisodeViewData>)
     }
 
-    override fun onSelectedEpisode(episodeViewData: EpisodeViewData) {
-        listener?.onShowEpisodePlayer(episodeViewData)
+    override fun onSelectedEpisode(episodeViewDataPosition: Int) {
+        listener?.onShowEpisodePlayer(episodeViewDataPosition, storeList)
     }
 }

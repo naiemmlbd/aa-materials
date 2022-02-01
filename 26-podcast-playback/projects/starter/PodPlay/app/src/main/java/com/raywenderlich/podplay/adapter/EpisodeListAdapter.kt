@@ -10,7 +10,7 @@ import com.raywenderlich.podplay.util.HtmlUtils
 import com.raywenderlich.podplay.viewmodel.PodcastViewModel
 
 interface EpisodeListAdapterListener {
-    fun onSelectedEpisode(episodeViewData: PodcastViewModel.EpisodeViewData)
+    fun onSelectedEpisode(episodeViewData: Int)
 }
 
 class EpisodeListAdapter(
@@ -28,13 +28,7 @@ class EpisodeListAdapter(
         val durationTextView: TextView = databinding.durationView
         val releaseDateTextView: TextView = databinding.releaseDateView
 
-        init {
-            databinding.root.setOnClickListener {
-                episodeViewData?.let {
-                    episodeListAdapterListener.onSelectedEpisode(it)
-                }
-            }
-        }
+
     }
 
     override fun onCreateViewHolder(
@@ -61,6 +55,9 @@ class EpisodeListAdapter(
         holder.durationTextView.text = episodeView.duration
         holder.releaseDateTextView.text = episodeView.releaseDate?.let {
             DateUtils.dateToShortDate(it)
+        }
+        holder.itemView.setOnClickListener {
+            episodeListAdapterListener.onSelectedEpisode(position)
         }
     }
 

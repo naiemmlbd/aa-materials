@@ -40,6 +40,7 @@ import com.raywenderlich.podplay.repository.PodcastRepo
 import com.raywenderlich.podplay.util.DateUtils
 import com.raywenderlich.podplay.viewmodel.SearchViewModel.PodcastSummaryViewData
 import java.util.*
+import kotlin.collections.ArrayList
 
 class PodcastViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -48,6 +49,8 @@ class PodcastViewModel(application: Application) : AndroidViewModel(application)
     val podcastLiveData: LiveData<PodcastViewData?> = _podcastLiveData
     var livePodcastSummaryData: LiveData<List<PodcastSummaryViewData>>? = null
     var activeEpisodeViewData: EpisodeViewData? = null
+    var episodeList: List<EpisodeViewData> = ArrayList()
+    var intialEpisodePosition: Int = 0
 
 
     val podcastDao: PodcastDao = PodPlayDatabase

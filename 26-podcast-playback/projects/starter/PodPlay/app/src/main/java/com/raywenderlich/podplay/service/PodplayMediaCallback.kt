@@ -31,7 +31,6 @@ class PodplayMediaCallback(
     private var focusRequest: AudioFocusRequest? = null
     var listener: PodplayMediaListener? = null
 
-
     private fun setNewMedia(uri: Uri?) {
         newMedia = true
         mediaUri = uri
@@ -124,8 +123,10 @@ class PodplayMediaCallback(
         pausePlaying()
     }
 
-    override fun onCommand(command: String?, extras: Bundle?,
-                           cb: ResultReceiver?) {
+    override fun onCommand(
+        command: String?, extras: Bundle?,
+        cb: ResultReceiver?
+    ) {
         super.onCommand(command, extras, cb)
         when (command) {
             CMD_CHANGESPEED -> extras?.let { changeSpeed(it) }
@@ -185,8 +186,10 @@ class PodplayMediaCallback(
                                     mediaExtras.getString(
                                         MediaMetadataCompat.METADATA_KEY_ALBUM_ART_URI
                                     )
-                                ).putLong(MediaMetadataCompat.METADATA_KEY_DURATION,
-                                    mediaPlayer.duration.toLong())
+                                ).putLong(
+                                    MediaMetadataCompat.METADATA_KEY_DURATION,
+                                    mediaPlayer.duration.toLong()
+                                )
                                 .build()
                         )
                     }
@@ -282,7 +285,8 @@ class PodplayMediaCallback(
                 PlaybackStateCompat.ACTION_PLAY or
                         PlaybackStateCompat.ACTION_STOP or
                         PlaybackStateCompat.ACTION_PLAY_PAUSE or
-                        PlaybackStateCompat.ACTION_PAUSE
+                        PlaybackStateCompat.ACTION_PAUSE or
+                        PlaybackStateCompat.ACTION_SKIP_TO_NEXT
             )
             .setState(state, position, speed)
             .build()

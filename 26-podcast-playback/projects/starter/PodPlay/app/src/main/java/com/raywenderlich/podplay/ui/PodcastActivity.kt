@@ -291,8 +291,18 @@ class PodcastActivity : AppCompatActivity(), PodcastListAdapterListener,
     supportFragmentManager.popBackStack()
   }
 
-  override fun onShowEpisodePlayer(episodeViewData: PodcastViewModel.EpisodeViewData) {
-    podcastViewModel.activeEpisodeViewData = episodeViewData
-    showPlayerFragment()
-  }
+  override fun onShowEpisodePlayer(
+    episodeViewDataPosition: Int,
+    episodeList: List<PodcastViewModel.EpisodeViewData>
+  ) {
+    podcastViewModel.activeEpisodeViewData = episodeList[episodeViewDataPosition]
+    podcastViewModel.intialEpisodePosition = episodeViewDataPosition
+    podcastViewModel.episodeList = episodeList
+    showPlayerFragment()   }
+
+
+//  override fun onShowEpisodePlayer(episodeViewData: PodcastViewModel.EpisodeViewData) {
+//    podcastViewModel.activeEpisodeViewData = episodeViewData
+//    showPlayerFragment()
+//  }
 }
