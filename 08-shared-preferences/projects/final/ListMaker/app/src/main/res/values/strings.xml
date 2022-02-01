@@ -1,5 +1,0 @@
-<resources>
-    <string name="app_name">Listmaker</string>
-    <string name="name_of_list">What is the name of your list?</string>
-    <string name="create_list">Create</string>
-</resources>
